@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 square.innerHTML = ' 🚩';
                 flags++;
                 flagsLeft.innerHTML = bombAmount - flags;
+                checkForWin();
             } else {
                 square.classList.remove('flag');
                 square.innerHTML = '';
@@ -109,5 +110,21 @@ document.addEventListener('DOMContentLoaded', () => {
             checkSquare(square, currentId);
         }
         square.classList.add('checked');
+    }
+
+    // check for win
+    function checkForWin() {
+        // simplified win argument
+        let matches = 0;
+
+        for (let i = 0; i < squares.length; i++) {
+            if (squares[i].classList.contains('flag') && squares[i].classList.contains('bomb')) {
+                matches++;
+            }
+            if (matches === bombAmount) {
+                result.innerHTML = 'YOU WIN!';
+                isGameOver = true;
+            }
+        }
     }
 });
