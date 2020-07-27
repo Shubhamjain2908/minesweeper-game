@@ -22,8 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // normal click
             square.addEventListener('click', function (e) {
-                click(square)
+                click(square);
             });
+
+            // cntrl and left click
+            square.oncontextmenu = function (e) {
+                e.preventDefault();
+                addFlag(square);
+            }
         }
 
         // add numbers
@@ -64,26 +70,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     createBoard();
 
+    //add Flag with right click
+    function addFlag(square) {
+        if (isGameOver) return;
+        if (!square.classList.contains('checked') && (flags < bombAmount)) {
+            if (!square.classList.contains('flag')) {
+                square.classList.add('flag');
+                square.innerHTML = ' 🚩';
+                flags++;
+                flagsLeft.innerHTML = bombAmount - flags;
+            } else {
+                square.classList.remove('flag');
+                square.innerHTML = '';
+                flags--;
+                flagsLeft.innerHTML = bombAmount - flags;
+            }
+        }
+    }
+
     // click on square actions
     function click(square) {
-        let currentId = square.id
-        if (isGameOver) return
-        if (square.classList.contains('checked') || square.classList.contains('flag')) return
+        let currentId = square.id;
+        if (isGameOver) return;
+        if (square.classList.contains('checked') || square.classList.contains('flag')) return;
         if (square.classList.contains('bomb')) {
-            gameOver(square)
+            gameOver(square);
         } else {
-            let total = square.getAttribute('data')
+            let total = square.getAttribute('data');
             if (total != 0) {
-                square.classList.add('checked')
-                if (total == 1) square.classList.add('one')
-                if (total == 2) square.classList.add('two')
-                if (total == 3) square.classList.add('three')
-                if (total == 4) square.classList.add('four')
-                square.innerHTML = total
-                return
+                square.classList.add('checked');
+                if (total == 1) square.classList.add('one');
+                if (total == 2) square.classList.add('two');
+                if (total == 3) square.classList.add('three');
+                if (total == 4) square.classList.add('four');
+                square.innerHTML = total;
+                return;
             }
-            checkSquare(square, currentId)
+            checkSquare(square, currentId);
         }
-        square.classList.add('checked')
+        square.classList.add('checked');
     }
 });
